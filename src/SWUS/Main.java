@@ -1,9 +1,6 @@
 package SWUS;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.concurrent.BrokenBarrierException;
 
 public class Main {
@@ -26,9 +23,10 @@ public class Main {
         tmp = br.readLine();
             int bufferSize = Integer.parseInt(tmp.substring(tmp.indexOf("#")+1,tmp.indexOf('@')));
         br.close();
-
         PrintWriter writer = new PrintWriter("Stats.txt", "UTF-8");
         float suma = 0;
+
+
 
         for (int i = 0; i < simulationsNumber; i++) {
             System.out.println("Symulacja "+i);
@@ -36,9 +34,13 @@ public class Main {
             writer.println("Wynik "+i+" symulacji: "+Double.toString(mainProgram.getStarts())+"%");
             suma += mainProgram.getStarts();
         }
-        writer.println("Srednia symulacji: "+Double.toString(suma/(float)simulationsNumber)+"%");
+        writer.println("Srednia symulacji: "+Float.toString(suma/(float)simulationsNumber)+"%");
         writer.close();
+        PrintWriter writer2 = new PrintWriter(new FileWriter("AverageStats.txt", true));
+        writer2.println("Wynik symulacji:"+Float.toString(suma/(float)simulationsNumber)+"% dla danych: simulationsNumber("+simulationsNumber+");connectionNumber("+connectionNumber+");" +
+                "packageNumber("+packageNumber+");peakRate("+peakRate+");tau("+tau+"ns);processingTime("+processingTime+"ns);bufferSize("+bufferSize+")");
         System.out.println("Koniec");
+        writer2.close();
         System.exit(0);
     }
 

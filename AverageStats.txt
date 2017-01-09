@@ -1,0 +1,1 @@
+Wynik symulacji:70.028% dla danych: simulationsNumber(20);connectionNumber(5);packageNumber(500);peakRate(2);tau(2000000ns);processingTime(500000ns);bufferSize(20)
