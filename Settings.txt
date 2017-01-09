@@ -1,6 +1,7 @@
-5
-500
-2
-2000000
-500000
-20
+#20@ simulationsNumber
+#5@ Connections
+#500@ PackageNumber
+#2@ PR
+#2000000@ Tau
+#500000@ ProcessingTime
+#20@BufferSize

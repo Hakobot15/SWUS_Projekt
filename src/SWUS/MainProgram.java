@@ -1,51 +1,29 @@
 package SWUS;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+
 import java.io.IOException;
 import java.util.concurrent.BrokenBarrierException;
-import java.util.concurrent.CountDownLatch;
+
 
 /**
  * Created by ${TomaszJaniec} on 07.01.2017.
  */
 public class MainProgram {
 
-    /**
-     * Ilosc polaczen do routera
-     */
-    private int connectionNumber;
-    /**
-     * Ilosc pakietow w ramach jednego polaczenia
-     */
-    private int packageNumber;
-    /**
-     * PeakRate
-     */
-    private int peakRate;
-    /**
-     * czas Tau - czas pomiedzy wyslaniem 2 pakietow w nanoS
-     */
-    private int tau;
-    /**
-     * Czas obslugi jednego pakietu - w nanoS
-     */
-    private int processingTime;
-    private int bufferSize;
+
     /**
      * Buffer
      */
+    private Buffer buffer;
 
-    private  Buffer buffer;
+    MainProgram(int connectionNumber, int packageNumber, int peakRate, int tau, int processingTime, int bufferSize) throws IOException, BrokenBarrierException, InterruptedException {
 
-    MainProgram() throws IOException, BrokenBarrierException, InterruptedException {
-        readFile();
         buffer =  new Buffer(bufferSize);
-        startProgram();
+        startProgram(connectionNumber, packageNumber, peakRate, tau, processingTime);
     }
 
-    private void startProgram() throws BrokenBarrierException, InterruptedException {
-        Thread t1 = new EventPacketSender(() -> buffer.deletePackage(), processingTime );
+    private void startProgram(int connectionNumber, int packageNumber, int peakRate, int tau, int processingTime) throws BrokenBarrierException, InterruptedException {
+        Thread t1 = new EventPacketSender(() -> buffer.deletePackage(), processingTime);
         Thread t2 = new Thread(() -> {
                 new PackageGenerator(connectionNumber, packageNumber, tau, () -> buffer.addPackage());
         });
@@ -57,37 +35,6 @@ public class MainProgram {
             continue;
         }
 
-    }
-
-    private void readFile() throws IOException {
-        BufferedReader br = new BufferedReader( new FileReader("settings.txt"));
-        connectionNumber = Integer.parseInt(br.readLine());
-        packageNumber = Integer.parseInt(br.readLine());
-        peakRate = Integer.parseInt(br.readLine());
-        tau = Integer.parseInt(br.readLine());
-        processingTime = Integer.parseInt(br.readLine());
-        bufferSize = Integer.parseInt(br.readLine());
-        br.close();
-    }
-
-    int getConnectionNumber(){
-        return connectionNumber;
-    }
-
-    public int getPeakRate() {
-        return peakRate;
-    }
-
-    int getTau() {
-        return tau;
-    }
-
-    int getProcessingTime() {
-        return processingTime;
-    }
-
-    int getPackageNumber() {
-        return packageNumber;
     }
 
     float getStarts() {
